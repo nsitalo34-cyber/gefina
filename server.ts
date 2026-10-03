@@ -60,8 +60,9 @@ app.get('/api/invoices/:id', (request, response) => {
             status: 404,
             message: 'Fatura não encontrada.' 
         }});
-    }
-);
+
+        response.status(200).json(invoice);
+});
 
 app.use((request, response) => {
     response.status(404).json({ error: {
