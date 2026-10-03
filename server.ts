@@ -1,4 +1,6 @@
-import { createServer } from 'node:http';
+import express from 'express';
+
+const app = express();
 
 type InvoiceStatus = 'pending' | 'paid';
 
@@ -41,28 +43,31 @@ const invoices: Invoice[] = [{
     }
 }];
 
-createServer(function (request, response) {
-    if (request.url === "/api/health") {
-     response.writeHead(
-        200,
-        { 'content-type': 'application/json' }
-    );
-    response.end(JSON.stringify({ status: "ok" }));
-    return;
-    }
+app.get('/api/health', (request, response) => {
+    response.status(200).json({ status: 'ok' });
+});
 
-    if (request.url === "/api/invoices") {
-        response.writeHead(
-            200,
-            { 'content-type': 'application/json' }
-        );
-        response.end(JSON.stringify(invoices));
-        return;
-    }
+app.get('/api/invoices', (request, response) => {
+    response.status(200).json(invoices);
+});
 
-    response.writeHead(
-        404,
-        { 'content-type': 'application/json' }
-    );
-    response.end(JSON.stringify({ message: "Recurso não encontrado." }));
-}).listen(3000);
+app.get('/api/invoices/:id', (request, response) => {
+   const id = +request.params.id;
+
+    const invoice = invoices.find((invoice) => invoice.id === id);
+
+    if (!invoice) response.status(404).json({ error: {
+            status: 404,
+            message: 'Fatura não encontrada.' 
+        }});
+    }
+);
+
+app.use((request, response) => {
+    response.status(404).json({ error: {
+        status: 404,
+        message: 'Recurso não encontrado.' 
+    }});
+});
+
+app.listen(3000);
