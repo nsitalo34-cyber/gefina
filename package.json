@@ -1,0 +1,15 @@
+{
+    "name": "gafina",
+    "version": "0.0.0",
+    "description": "Sistema de gestão de contas a receber",
+    "author": "Italo Nobre",
+    "type": "module",
+    "scripts": {
+        "dev": "node --watch ./server.ts",
+        "check": "tsc --noEmit"
+    },
+    "devDependencies": {
+        "@types/node": "^26.6.4",
+        "typescript": "^7.0.2"
+    }
+}
